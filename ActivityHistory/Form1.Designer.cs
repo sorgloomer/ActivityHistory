@@ -96,13 +96,13 @@
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(807, 6);
+            this.textBox1.Location = new System.Drawing.Point(780, 6);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(208, 13);
+            this.textBox1.Size = new System.Drawing.Size(235, 13);
             this.textBox1.TabIndex = 4;
             this.textBox1.TabStop = false;
-            this.textBox1.Text = "by Tamás Hegedűs, github.com/sorgloomer";
+            this.textBox1.Text = "by Tamás Hegedűs, v1.1, github.com/sorgloomer";
             // 
             // textBox2
             // 
@@ -112,7 +112,7 @@
             this.textBox2.Location = new System.Drawing.Point(124, 6);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(677, 13);
+            this.textBox2.Size = new System.Drawing.Size(650, 13);
             this.textBox2.TabIndex = 5;
             this.textBox2.TabStop = false;
             this.textBox2.Text = "current app";
@@ -143,6 +143,8 @@
             this.Name = "ActivityMonitorMainForm";
             this.Text = "Activity Monitor";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ActivityMonitorMainForm_FormClosed);
+            this.Load += new System.EventHandler(this.ActivityMonitorMainForm_Load);
+            this.Shown += new System.EventHandler(this.ActivityMonitorMainForm_Shown);
             this.Resize += new System.EventHandler(this.ActivityMonitorMainForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

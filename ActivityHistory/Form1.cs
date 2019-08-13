@@ -2,6 +2,7 @@
 using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -125,5 +126,18 @@ namespace ActivityHistory
             WindowState = FormWindowState.Normal;
         }
 
+        private void ActivityMonitorMainForm_Shown(object sender, EventArgs e)
+        {
+            if (Environment.GetCommandLineArgs().Contains("--minimized"))
+            {
+                WindowState = FormWindowState.Minimized;
+                Visible = false;
+                Hide();
+            }
+        }
+
+        private void ActivityMonitorMainForm_Load(object sender, EventArgs e)
+        {
+        }
     }
 }

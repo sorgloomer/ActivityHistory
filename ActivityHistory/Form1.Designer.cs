@@ -38,6 +38,7 @@
             this.Timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.WindowText = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ExecutableName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -110,11 +111,21 @@
             this.ExecutableName.ReadOnly = true;
             this.ExecutableName.Width = 150;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(802, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(213, 13);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "by Tamás Hegedűs, github.com/sorgloomer";
+            // 
             // ActivityMonitorMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1027, 502);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -139,6 +150,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Timestamp;
         private System.Windows.Forms.DataGridViewTextBoxColumn WindowText;
         private System.Windows.Forms.DataGridViewTextBoxColumn ExecutableName;
+        private System.Windows.Forms.Label label3;
     }
 }
 

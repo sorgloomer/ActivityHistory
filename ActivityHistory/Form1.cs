@@ -39,7 +39,7 @@ namespace ActivityHistory
             {
                 return;
             }
-            label1.Text = currentFocus.WindowTitle;
+            textBox2.Text = currentFocus.WindowTitle;
             LastFocus = currentFocus;
             RegisterFocusChange(new FocusChange
             {
@@ -124,5 +124,6 @@ namespace ActivityHistory
             Show();
             WindowState = FormWindowState.Normal;
         }
+
     }
 }

@@ -13,14 +13,16 @@ namespace ActivityHistory
 {
     public partial class ActivityMonitorMainForm : Form
     {
+        public const int MaxHistoryRowCount = 200;
         private FocusInfo LastFocus = null;
         private IList<FocusChange> FocusChanges = new List<FocusChange>();
         private CsvWriter csvWriter;
+        private string logFileName = "activity.log.csv";
         public ActivityMonitorMainForm()
         {
             InitializeComponent();
             csvWriter = new CsvWriter(
-                File.AppendText("activity.log.csv"),
+                new StreamWriter(logFileName, true, Encoding.UTF8),
                 new Configuration() { Delimiter = ";" }
             );
         }
@@ -57,9 +59,9 @@ namespace ActivityHistory
                 focusChange.FocusInfo.WindowTitle,
                 focusChange.FocusInfo.ExecutableName
             );
-            while (dataGridView1.Rows.Count > 100)
+            while (dataGridView1.Rows.Count > MaxHistoryRowCount)
             {
-                dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count);
+                dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
             }
             csvWriter.WriteRecord(focusChange);
             csvWriter.NextRecord();

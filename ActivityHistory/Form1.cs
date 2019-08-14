@@ -20,11 +20,8 @@ namespace ActivityHistory
         {
             InitializeComponent();
             csvWriter = new CsvWriter(
-                new StreamWriter(File.OpenWrite("activity.log.csv")), 
-                new Configuration()
-                {
-                    Delimiter = ";"
-                }
+                File.AppendText("activity.log.csv"),
+                new Configuration() { Delimiter = ";" }
             );
         }
 

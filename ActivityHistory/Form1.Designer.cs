@@ -1,4 +1,6 @@
-﻿namespace ActivityHistory
+﻿using System;
+
+namespace ActivityHistory
 {
     partial class ActivityMonitorMainForm
     {
@@ -17,6 +19,7 @@
             {
                 components.Dispose();
             }
+            DisposeNonDesigner(disposing);
             base.Dispose(disposing);
         }
 
@@ -30,7 +33,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ActivityMonitorMainForm));
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Timestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -41,11 +43,6 @@
             this.textBox3 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // timer1
-            // 
-            this.timer1.Enabled = true;
-            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // notifyIcon1
             // 
@@ -144,7 +141,6 @@
             this.Name = "ActivityMonitorMainForm";
             this.Text = "Activity Monitor";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ActivityMonitorMainForm_FormClosed);
-            this.Load += new System.EventHandler(this.ActivityMonitorMainForm_Load);
             this.Shown += new System.EventHandler(this.ActivityMonitorMainForm_Shown);
             this.Resize += new System.EventHandler(this.ActivityMonitorMainForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
@@ -154,8 +150,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Timestamp;

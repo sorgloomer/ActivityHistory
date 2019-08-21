@@ -8,6 +8,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Security.Permissions;
+using Microsoft.Win32.SafeHandles;
+using System.Runtime.ConstrainedExecution;
 
 namespace ActivityHistory
 {
@@ -18,6 +21,8 @@ namespace ActivityHistory
         private IList<FocusChange> FocusChanges = new List<FocusChange>();
         private CsvWriter csvWriter;
         private string logFileName = "activity.log.csv";
+        private int updateCounter = 0;
+        SystemForegroundTitleListener systemFocusTitleListener = new SystemForegroundTitleListener();
         public ActivityMonitorMainForm()
         {
             InitializeComponent();
@@ -25,21 +30,23 @@ namespace ActivityHistory
                 new StreamWriter(logFileName, true, Encoding.UTF8),
                 new Configuration() { Delimiter = ";" }
             );
+            systemFocusTitleListener.ForegroundTitleProbablyChanged += UpdateCurrentApplication;
         }
 
-        private void Timer1_Tick(object sender, EventArgs e)
+        private void DisposeNonDesigner(bool disposing)
         {
-            UpdateCurrentApplication();
+            Refs.Dispose(systemFocusTitleListener);
         }
 
         private void UpdateCurrentApplication()
         {
+            updateCounter++;
             var currentFocus = GetCurrentFocus();
             if (FocusInfo.Equality.Equals(currentFocus, LastFocus))
             {
                 return;
             }
-            textBox2.Text = currentFocus.WindowTitle;
+            textBox2.Text = $"{currentFocus.WindowTitle}, ({updateCounter})";
             LastFocus = currentFocus;
             RegisterFocusChange(new FocusChange
             {
@@ -67,35 +74,57 @@ namespace ActivityHistory
             csvWriter.NextRecord();
         }
 
-        [DllImport("user32.dll")]
-        static extern IntPtr GetForegroundWindow();
+        static class WinApi {
 
-        [DllImport("user32.dll")]
-        static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+            [DllImport("user32.dll")]
+            public static extern IntPtr GetForegroundWindow();
 
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+            [DllImport("user32.dll")]
+            public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
+            public static string GetWindowText(IntPtr hWnd) {
+                for (int nChars = 1024; nChars < 512 * 1024; nChars *= 4)
+                {
+                    StringBuilder buff = new StringBuilder(nChars);
+                    if (GetWindowText(hWnd, buff, nChars) == 0)
+                    {
+                        return null;
+                    }
+                    if (buff.Length < nChars)
+                    {
+                        return buff.ToString();
+                    }
+                }
+                throw new Exception("Could not retrieve window title");
+            }
+
+
+            [DllImport("user32.dll", SetLastError = true)]
+            public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
+            [DllImport("user32.dll", SetLastError = true)]
+            private static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr lpdwProcessId);
+
+            public static uint GetWindowProcessId(IntPtr hWnd)
+            {
+                GetWindowThreadProcessId(hWnd, out var result);
+                return result;
+            }
+        }
 
         public FocusInfo GetCurrentFocus()
         {
             try
             {
-                const int nChars = 1024;
-                IntPtr handle = GetForegroundWindow();
+                IntPtr handle = WinApi.GetForegroundWindow();
                 FocusInfo focusInfo = new FocusInfo()
                 {
                     HWND = (long)handle,
                 };
 
-                uint pid;
-                GetWindowThreadProcessId(handle, out pid);
+                var pid = WinApi.GetWindowProcessId(handle);
                 focusInfo.PID = pid;
                 var process = Process.GetProcessById((int)pid);
-                StringBuilder buff = new StringBuilder(nChars);
-                if (GetWindowText(handle, buff, nChars) > 0)
-                {
-                    focusInfo.WindowTitle = buff.ToString();
-                }
+                focusInfo.WindowTitle = WinApi.GetWindowText(handle);
                 focusInfo.ExecutableFile = process.MainModule.FileName;
                 focusInfo.ExecutableName = process.MainModule.ModuleName;
                 return focusInfo;
@@ -133,10 +162,6 @@ namespace ActivityHistory
                 Visible = false;
                 Hide();
             }
-        }
-
-        private void ActivityMonitorMainForm_Load(object sender, EventArgs e)
-        {
         }
     }
 }

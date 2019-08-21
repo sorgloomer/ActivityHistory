@@ -99,7 +99,7 @@ namespace ActivityHistory
             this.textBox1.Size = new System.Drawing.Size(316, 13);
             this.textBox1.TabIndex = 4;
             this.textBox1.TabStop = false;
-            this.textBox1.Text = "by Tamás Hegedűs, v1.2-snapshot, github.com/sorgloomer";
+            this.textBox1.Text = "by Tamás Hegedűs, v1.2, github.com/sorgloomer";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // textBox2

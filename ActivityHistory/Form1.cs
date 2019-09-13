@@ -16,21 +16,18 @@ namespace ActivityHistory
 {
     public partial class ActivityMonitorMainForm : Form
     {
+        private const string LogFileNamePattern = "logs/activity-{0}.log.csv";
         public const int MaxHistoryRowCount = 200;
         private FocusInfo LastFocus = null;
         private IList<FocusChange> FocusChanges = new List<FocusChange>();
-        private CsvWriter csvWriter;
-        private string logFileName = "activity.log.csv";
+        private IRowWriter rowWriter;
         private int updateCounter = 0;
         SystemForegroundTitleListener systemFocusTitleListener = new SystemForegroundTitleListener();
         public ActivityMonitorMainForm()
         {
             InitializeComponent();
-            csvWriter = new CsvWriter(
-                new StreamWriter(logFileName, true, Encoding.UTF8),
-                new Configuration() { Delimiter = ";" }
-            );
             systemFocusTitleListener.ForegroundTitleProbablyChanged += UpdateCurrentApplication;
+            rowWriter = new MultiFileRowWriter(LogFileNamePattern);
         }
 
         private void DisposeNonDesigner(bool disposing)
@@ -50,7 +47,7 @@ namespace ActivityHistory
             LastFocus = currentFocus;
             RegisterFocusChange(new FocusChange
             {
-                Timestamp = DateTime.Now.ToString(FocusChange.DateFormat),
+                Timestamp = DateTime.Now.ToString(FocusChange.DateTimeFormat),
                 FocusInfo = currentFocus,
             });
         }
@@ -70,8 +67,7 @@ namespace ActivityHistory
             {
                 dataGridView1.Rows.RemoveAt(dataGridView1.Rows.Count - 1);
             }
-            csvWriter.WriteRecord(focusChange);
-            csvWriter.NextRecord();
+            rowWriter.WriteRow(focusChange);
         }
 
         static class WinApi {
@@ -137,7 +133,7 @@ namespace ActivityHistory
 
         private void ActivityMonitorMainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            csvWriter.Dispose();
+            Refs.Dispose(rowWriter);
         }
 
         private void ActivityMonitorMainForm_Resize(object sender, EventArgs e)

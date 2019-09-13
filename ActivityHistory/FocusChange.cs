@@ -11,9 +11,14 @@ namespace ActivityHistory
             .And(f => f.FocusInfo)
             .AndHandleNulls();
 
-        public const string DateFormat = "yyyy-MM-dd HH:mm:ss.fff";
+        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
         public string Timestamp { get; set; }
         public FocusInfo FocusInfo { get; set; }
+
+        public static string DateFromTimestamp(FocusChange focusChange)
+        {
+            return focusChange.Timestamp.Substring(0, 10);
+        }
 
     }
 }

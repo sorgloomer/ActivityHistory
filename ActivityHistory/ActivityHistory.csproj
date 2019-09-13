@@ -63,9 +63,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="IRowWriter.cs" />
+    <Compile Include="MultiFileRowWriter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Refs.cs" />
+    <Compile Include="SingleFileRowWriter.cs" />
     <Compile Include="SystemForegroundTitleListener.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

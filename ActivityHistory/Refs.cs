@@ -19,6 +19,12 @@ namespace ActivityHistory
             Dispose(refObj);
             refObj = newValue;
         }
+
+        public static void Free<T>(ref T refObj) where T : class, IDisposable
+        {
+            Set(ref refObj, null);
+        }
+
         public static void Fire(Action action)
         {
             if (action != null)

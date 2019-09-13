@@ -16,5 +16,5 @@ You run the application manually, and it immediately starts recording the
 focused windows title, executable and hwnd. It stores the data in a file called
 `activity.log.csv` besides the executable.
 
-It works by polling the currently focused window every 100ms, and records if
-there is a change.
+It works applying Windows Hooks to watch the foreground window, and to listen
+for window title changes.
